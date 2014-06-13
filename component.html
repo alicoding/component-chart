@@ -1,0 +1,72 @@
+<polymer-element name="ceci-chart" collectionname="times" extends="ceci-element" attributes="unit increment value collectionname">
+  <script src="vendor/chartjs/Chart.min.js"></script>
+  <ceci-definition>
+    {
+      "name": "Chart",
+      "thumbnail": "./thumbnail.png",
+      "description": "Charts a collection",
+      "tags": ["asdf"],
+      "broadcasts": {
+      },
+      "listeners": {
+        "graph": {
+          "description": "Graphs available data.",
+          "label": "Graph",
+          "default": true
+        }
+      },
+      "attributes": {
+        "collectionname": {
+          "description": "The name of the collection to store the value",
+          "label": "Collection Name",
+          "editable": "text"
+        }
+      }
+    }
+  </ceci-definition>
+  <template>
+    <link rel="stylesheet" href="component.css">
+    <div class="wrapper">
+      <canvas id="canvas" width="310" height="400"></canvas>
+    </div>
+    <shadow></shadow>
+  </template>
+  <tags></tags>
+  <script>
+    Polymer("ceci-chart", {
+      ready: function() {
+        this.super();
+        var canvas = this.$.canvas;
+        var ctx = canvas.getContext('2d');
+        this.chart = new Chart(ctx);
+      },
+      getData: function() {
+        var data = JSON.parse(localStorage['hack-collection-' + this.collectionname]);
+
+        var values = [];
+        var keys = Object.keys(data);
+
+        for (var i in keys){
+          values.push(data[keys[i]]);
+        }
+
+        return {
+          labels: keys,
+          datasets: [
+            {
+              fillColor: "rgba(220,220,220,0.5)",
+              strokeColor: "rgba(220,220,220,1)",
+              data: values
+            }
+          ]
+        };
+      },
+      graph: function() {
+        // console.log(this.getData());
+        this.chart.Line(this.getData(), {
+          animation: false
+        });
+      }
+    });
+  </script>
+</polymer-element>
