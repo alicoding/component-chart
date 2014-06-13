@@ -39,6 +39,24 @@
         var canvas = this.$.canvas;
         var ctx = canvas.getContext('2d');
         this.chart = new Chart(ctx);
+
+        if (!'hack-collection-' + this.collectionname in localStorage){
+          localStorage['hack-collection-times'] = JSON.stringify({
+            "6/2/2014":20,
+            "6/3/2014":20,
+            "6/4/2014":23,
+            "6/5/2014":25,
+            "6/6/2014":30,
+            "6/7/2014":32,
+            "6/8/2014":35,
+            "6/9/2014":36,
+            "6/10/2014":33,
+            "6/11/2014":25,
+            "6/12/2014":34,
+            "6/13/2014":60
+          });
+        }
+
       },
       getData: function() {
         var data = JSON.parse(localStorage['hack-collection-' + this.collectionname]);
