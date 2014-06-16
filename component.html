@@ -72,18 +72,31 @@
           labels: keys,
           datasets: [
             {
-              fillColor: "rgba(220,220,220,0.5)",
-              strokeColor: "rgba(220,220,220,1)",
+              fillColor: "rgba(54, 171, 42, .6)",
+              strokeColor: "rgba(30, 151, 29, 1.0000)",
               data: values
             }
           ]
         };
       },
+      getIntegerScaleParameters: function(data) {
+        var maxValue = false;
+        for (datasetIndex = 0; datasetIndex < data.datasets.length; ++datasetIndex) {
+           var setMax = Math.max.apply(null, data.datasets[datasetIndex].data);
+           if (maxValue === false || setMax > maxValue) maxValue = setMax;
+        }
+
+        var steps = new Number(maxValue);
+        var stepWidth = new Number(1);
+        if (maxValue > 10) {
+           stepWidth = Math.floor(maxValue / 10);
+           steps = Math.ceil(maxValue / stepWidth);
+        }
+        return { animation: false, scaleOverride: true, scaleSteps: steps, scaleStepWidth: stepWidth, scaleStartValue: 0 };
+      },
       graph: function() {
-        // console.log(this.getData());
-        this.chart.Line(this.getData(), {
-          animation: false
-        });
+        var data = this.getData();
+        this.chart.Line(data, this.getIntegerScaleParameters(data));
       }
     });
   </script>
